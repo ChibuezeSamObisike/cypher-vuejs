@@ -193,8 +193,6 @@ const createChart = async (): Promise<void> => {
       value: d.value,
     }));
 
-    debugLog(`Loaded ${data.length} data points`);
-
     // Create SVG container
     const { width, height, margin } = CHART_DIMENSIONS;
     const chartHeight = height - margin.top - margin.bottom;
@@ -216,15 +214,6 @@ const createChart = async (): Promise<void> => {
 
     const annotations = createAnnotations(data, scales);
     renderAnnotations(svg, annotations);
-
-    // Add instructions
-    svg
-      .append('text')
-      .attr('x', width + 20)
-      .attr('y', 20)
-      .attr('font-size', '12px')
-      .attr('fill', '#666')
-      .text('Annotations are draggable and interactive');
 
     debugLog('Chart created successfully!');
   } catch (error) {

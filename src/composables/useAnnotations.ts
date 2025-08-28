@@ -248,7 +248,7 @@ export function useAnnotations() {
           error instanceof Error ? error.message : 'Unknown error'
         }`
       );
-      renderCustomAnnotations(svg, annotations);
+      // renderCustomAnnotations(svg, annotations);
     }
   };
 
@@ -334,92 +334,6 @@ export function useAnnotations() {
     }, 100);
   };
 
-  // Render custom annotations as fallback
-  const renderCustomAnnotations = (
-    svg: d3.Selection<SVGGElement, unknown, any, any>,
-    annotations: AnnotationConfig[]
-  ): void => {
-    debugLog('Rendering custom annotations as fallback...');
-
-    const annotationGroup = svg.append('g').attr('class', 'custom-annotations');
-
-    annotations.forEach((ann) => {
-      const annotation = annotationGroup
-        .append('g')
-        .attr('class', 'custom-annotation')
-        .attr('transform', `translate(${ann.x}, ${ann.y})`);
-
-      // Reference circle
-      annotation
-        .append('circle')
-        .attr('class', 'custom-annotation-circle')
-        .attr('r', 4);
-
-      // Connector line
-      annotation
-        .append('line')
-        .attr('class', 'custom-annotation-line')
-        .attr('x1', 0)
-        .attr('y1', 0)
-        .attr('x2', ann.dx)
-        .attr('y2', ann.dy);
-
-      // Text box background
-      annotation
-        .append('rect')
-        .attr('x', ann.dx - 80)
-        .attr('y', ann.dy - 60)
-        .attr('width', 160)
-        .attr('height', 50)
-        .attr('fill', 'white')
-        .attr('stroke', '#ccc')
-        .attr('stroke-width', 1)
-        .attr('rx', 5);
-
-      // Date text
-      annotation
-        .append('text')
-        .attr('class', 'custom-annotation-text')
-        .attr('x', ann.dx)
-        .attr('y', ann.dy - 40)
-        .text(ann.note.title);
-
-      // Event text
-      annotation
-        .append('text')
-        .attr('class', 'custom-annotation-event')
-        .attr('x', ann.dx)
-        .attr('y', ann.dy - 25)
-        .text(ann.note.label);
-
-      // Make draggable
-      const drag = d3
-        .drag<SVGGElement, unknown>()
-        .on(
-          'drag',
-          function (event: d3.D3DragEvent<SVGGElement, unknown, unknown>) {
-            const currentTransform = d3.select(this).attr('transform');
-            const match = currentTransform.match(
-              /translate\(([^,]+),([^)]+)\)/
-            );
-
-            if (match) {
-              const currentX = parseFloat(match[1]);
-              const currentY = parseFloat(match[2]);
-              d3.select(this).attr(
-                'transform',
-                `translate(${currentX + event.dx}, ${currentY + event.dy})`
-              );
-            }
-          }
-        );
-
-      annotation.call(drag);
-    });
-
-    debugLog('Custom annotations rendered successfully!');
-  };
-
   // Delete annotation
   const deleteAnnotation = (index: number): void => {
     if (index >= 0 && index < annotationList.value.length) {
@@ -428,10 +342,8 @@ export function useAnnotations() {
         `🗑️ Deleting annotation: ${deletedAnnotation.note.title} (ID: ${deletedAnnotation.id})`
       );
 
-      // Remove from the list
       annotationList.value.splice(index, 1);
 
-      // Simple approach: remove all annotations and recreate them
       debugLog(`🔄 Recreating annotations after deletion...`);
 
       // Remove the entire annotation group
@@ -441,7 +353,6 @@ export function useAnnotations() {
         debugLog(`✅ Removed old annotation group`);
       }
 
-      // Clear the element map since we're recreating everything
       annotationElements.value.clear();
 
       // Recreate annotations with the updated list
@@ -497,8 +408,6 @@ export function useAnnotations() {
     } else {
       debugLog('❌ No annotation group found in DOM');
     }
-
-    debugLog('=== END DEBUG STATE ===');
   };
 
   return {
@@ -510,7 +419,6 @@ export function useAnnotations() {
     createAnnotations,
     renderAnnotations,
     makeAnnotationsDraggable,
-    renderCustomAnnotations,
     deleteAnnotation,
     getAnnotationType,
     debugAnnotationState,
