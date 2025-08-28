@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import * as d3 from 'd3';
 import { useAnnotations } from './composables/useAnnotations';
 import {
