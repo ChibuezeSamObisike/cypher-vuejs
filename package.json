@@ -1,0 +1,21 @@
+{
+  "name": "bitcoin-chart-vue",
+  "version": "1.0.0",
+  "description": "Bitcoin Chart with Vue.js and D3",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "d3-svg-annotation": "^2.5.1",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.5"
+  }
+}
